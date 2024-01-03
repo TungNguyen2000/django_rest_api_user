@@ -3,7 +3,7 @@ from .Models import UserModel
 from .serializers import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, render
 
 @api_view(['GET', 'POST'])
 def UserModel_List(request):
@@ -16,7 +16,7 @@ def UserModel_List(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+           
 @api_view(['GET', 'PUT', 'DELETE'])
 def UserModel_Details(request, id):
     try:

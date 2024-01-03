@@ -17,9 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from UserModel import views
+from django.urls import include, path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('users/', views.UserModel_List),
-    path('users/<int:id>', views.UserModel_Details)
+    path("user", include("user.urls"))
+    
 ]
