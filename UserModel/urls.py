@@ -19,7 +19,9 @@ from django.urls import path
 from UserModel import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('users/', views.UserModel_List),
-    path('users/<int:id>', views.UserModel_Details)
+    path('', views.GetAll),
+    path('<str:id>', views.GetOne),
+    path('users/create', views.Create),
+    path('update/<str:id>', views.Update),
+    path('delete/<str:id>', views.Delete)
 ]

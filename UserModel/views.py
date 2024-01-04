@@ -4,34 +4,44 @@ from .serializers import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from .services import *
 
-@api_view(['GET', 'POST'])
-def UserModel_List(request):
-    if request.method == 'GET':
-        users = UserModel.objects.all()
-        serializer = UserSerializer(users, many=True)
+@api_view(['GET'])
+def GetAll(request):
+    users = UserModel.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def Create(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+@api_view(['GET'])
+def GetOne(request, id):
+    user = FindOneAndSerialize(id)
+    if(user == None):
+        return  Response(status=status.HTTP_404_NOT_FOUND)
+    return Response(user.data)
+
+@api_view(['PUT'])
+def Update(request, id):
+    user = FindOne(id)
+    if(user == None):
+        return  Response(status=status.HTTP_404_NOT_FOUND)
+    serializer = UserSerializer(user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
         return Response(serializer.data)
-    if request.method == 'POST':
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def UserModel_Details(request, id):
-    try:
-        user = UserModel.objects.get(pk=id)
-    except UserModel.DoesNotExist:
+    else:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    if request.method == 'GET':
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['DELETE'])
+def Delete(request, id):
+    user = FindOne(id)
+    if(user == None):
+        return  Response(status=status.HTTP_404_NOT_FOUND)
+    user.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
