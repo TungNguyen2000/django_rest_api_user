@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'UserModel.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_user_rest_api',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django_user',
         'USER': 'root',
+        'PASSWORD': ' ',
+        'PORT': '5432',
     }
 }
 

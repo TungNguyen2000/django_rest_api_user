@@ -14,10 +14,7 @@ def GetAll(request):
 
 @api_view(['POST'])
 def Create(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return CreateUser(request=request)
     
 @api_view(['GET'])
 def GetOne(request, id):
@@ -28,20 +25,8 @@ def GetOne(request, id):
 
 @api_view(['PUT'])
 def Update(request, id):
-    user = FindOne(id)
-    if(user == None):
-        return  Response(status=status.HTTP_404_NOT_FOUND)
-    serializer = UserSerializer(user, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    return UpdateUser(request=request, id=id)
 
 @api_view(['DELETE'])
 def Delete(request, id):
-    user = FindOne(id)
-    if(user == None):
-        return  Response(status=status.HTTP_404_NOT_FOUND)
-    user.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return DeleteUser(id)
